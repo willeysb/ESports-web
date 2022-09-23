@@ -19,11 +19,13 @@ interface Game {
 }
 
 function App() {
+  
+  const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
 
   const [games, setGames] = useState<Game[]>([])
 
   useEffect(() => {
-    axios.get('http://localhost:3333/games').then((response) => {
+    axios.get(`${baseUrl}/games`).then((response) => {
       setGames(response.data)
     })
   }, [])

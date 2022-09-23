@@ -18,12 +18,15 @@ interface Game {
 }
 
 export function CreateAdModal () {
+
+  const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
+
   const [games, setGames] = useState<Game[]>([])
   const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>()
   const [weekDays, setWeekDays] = useState<string[]>([])
 
   useEffect(() => {
-    axios.get('http://localhost:3333/games').then((response) => {
+    axios.get(`${baseUrl}/games`).then((response) => {
       setGames(response.data)
     })
   }, [])
@@ -33,7 +36,7 @@ export function CreateAdModal () {
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
     try {
-      await axios.post(`http://localhost:3333/games/${data.game}/ads`, {
+      await axios.post(`${baseUrl}/games/${data.game}/ads`, {
         name: data.name,
         yearsPlaying: Number(data.yearsPlaying),
         discord: data.discord,
