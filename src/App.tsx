@@ -7,6 +7,7 @@ import { GameBanner } from './components/GameBanner'
 import { CreateAdBanner } from './components/CreatAdBanner'
 import { useEffect, useState } from 'react';
 import { CreateAdModal } from './components/Form/CreateAdModal';
+import { NewGame } from './components/NewGame';
 import axios from 'axios';
 
 interface Game {
@@ -38,15 +39,17 @@ function App() {
       </h1>
       <div className='flex'>
         <CaretLeft size='48' className='h-full pt-36 mr-4 text-zinc-400' />
-        <div className='grid grid-cols-6 gap-6 mt-16'>
+        
+          <div className='grid grid-cols-7 gap-6 mt-16'>
           {games.map(game => {
             return <GameBanner 
-              key={game.id}
-              title={game.title}
-              cover={game.bannerUrl}
-              ads={game._count.ads}
-            />
+                  key={game.id}
+                  title={game.title}
+                  cover={game.bannerUrl}
+                  ads={game._count.ads}
+              />
           })}
+          <NewGame />
         </div>
         <CaretRight size='48' className='h-full pt-36 ml-4  text-zinc-400' />
       </div>
