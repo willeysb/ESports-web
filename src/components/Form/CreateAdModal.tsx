@@ -22,7 +22,7 @@ export function CreateAdModal () {
   const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
 
   const [games, setGames] = useState<Game[]>([])
-  const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>()
+  const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
   const [weekDays, setWeekDays] = useState<string[]>([])
 
   useEffect(() => {
