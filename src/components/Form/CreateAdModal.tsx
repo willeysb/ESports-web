@@ -35,22 +35,31 @@ export function CreateAdModal () {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
-    try {
-      await axios.post(`${baseUrl}/games/${data.game}/ads`, {
-        name: data.name,
-        yearsPlaying: Number(data.yearsPlaying),
-        discord: data.discord,
-        weekDays: weekDays.map(Number),
-        hourStart: data.hourStart,
-        hourEnd: data.hourEnd,
-        useVoiceChannel: useVoiceChannel
-      })
-
-    alert('Anúncio criado com sucesso!')
-    } catch (error) {
-      console.log(error)
-      alert('Erro ao criar anúncio.')
+    if (weekDays.length > 0) {
+      try {
+        await axios.post(`${baseUrl}/games/${data.game}/ads`, {
+          name: data.name,
+          yearsPlaying: Number(data.yearsPlaying),
+          discord: data.discord,
+          weekDays: weekDays.map(Number),
+          hourStart: data.hourStart,
+          hourEnd: data.hourEnd,
+          useVoiceChannel: useVoiceChannel
+        })
+        .catch(err => {
+          console.log(err)
+        })
+          alert('Anúncio criado com sucesso!')
+        } catch (error) {
+          console.log(error)
+          alert('Erro ao criar anúncio.')
+        }
+    } else {
+      alert('Pelo menos um dia na semana é necessário.')
     }
+    
+
+    
   }
   
   return (
@@ -64,6 +73,7 @@ export function CreateAdModal () {
         <div className='flex flex-col gap-2 pt-4'>
           <label htmlFor='game' className='font-semibold'>Qual o game?</label>
           <select 
+            required
             id="game"
             name="game" 
             className='bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none'
@@ -75,16 +85,16 @@ export function CreateAdModal () {
         </div>
         <div className='flex flex-col gap-2 pt-4'>
           <label htmlFor='name'>Seu nome (ou Nickname)</label>
-          <Input id="name" name="name" type='text' placeholder='Como te chamam dentro do game?'></Input>
+          <Input required id="name" name="name" type='text' placeholder='Como te chamam dentro do game?'></Input>
         </div>
         <div className='grid grid-cols-2 gap-6 pt-4'>
           <div className='flex flex-col gap-2 pt-4'>
             <label htmlFor='yearsPlaying'>Joga há quantos anos?</label>
-            <Input id="yearsPlaying" name="yearsPlaying" type='number' placeholder='Tudo bem ser ZERO'></Input>
+            <Input required id="yearsPlaying" name="yearsPlaying" type='number' placeholder='Tudo bem ser ZERO'></Input>
           </div>
           <div className='flex flex-col gap-2 pt-4'>
             <label htmlFor='discord'>Qual seu discord?</label>
-            <Input id="discord" name="discord" type='text' placeholder='Usuario#0000'></Input>
+            <Input required id="discord" name="discord" type='text' placeholder='Usuario#0000'></Input>
           </div>
         </div>
         <div className='flex gap-6 pt-4'>
@@ -156,8 +166,8 @@ export function CreateAdModal () {
           <div className='flex flex-col gap-2 flex-1'>
             <label htmlFor='hourStart'>Qual horário do dia?</label>
             <div className='grid grid-cols-2 gap-2'>
-              <Input id="hourStart" name="hourStart" type='time' placeholder='De'></Input>
-              <Input id="hourEnd" name="hourEnd" type='time' placeholder='Até'></Input>
+              <Input required id="hourStart" name="hourStart" type='time' placeholder='De'></Input>
+              <Input required id="hourEnd" name="hourEnd" type='time' placeholder='Até'></Input>
             </div>
           </div>
         </div>
