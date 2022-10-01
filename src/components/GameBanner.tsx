@@ -1,12 +1,13 @@
 interface GameBannerProps {
   title: string,
   ads?: number,
-  cover: string
+  cover: string,
+  className?: string
 }
 
 export function GameBanner(props: GameBannerProps) {
   return (
-    <div className='relative w-full rounded-lg overflow-hidden h-full'>
+    <div className={props.className || 'relative w-full rounded-lg overflow-hidden h-full' }> 
       <img src={props.cover} />
       <div className='w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0 '>
         <strong className='text-white font-bold block'> {props.title} </strong>

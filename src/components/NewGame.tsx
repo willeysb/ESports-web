@@ -14,7 +14,11 @@ interface GameTwitchProps{
   name: string
 }
 
-export function NewGame () {
+interface Props {
+  className: string
+}
+
+export function NewGame (props: Props) {
 
   const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
 
@@ -80,67 +84,67 @@ export function NewGame () {
   }, [tokenTwitch])
 
   return (
-  <>
-    <Dialog.Root open={isOpenModal} onOpenChange={handleOpenModal}> 
-      <Dialog.Trigger>
-        <GameBanner 
-          title={"Ache um jogo"}
-          cover={'https://cdn2.iconfinder.com/data/icons/social-aquicons/512/Twitch.png'}
-        />
-      </Dialog.Trigger>
-      <Dialog.Portal>
-            <Dialog.Overlay className='bg-black/60 inset-0 fixed'/>
-            <Dialog.Content className='fixed bg-[#2a2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[360px] shadow-lg shadow-black/25'>
-              <Dialog.Title className='text-3xl font-black'> Ache um jogo via Twitch.TV </Dialog.Title>
-              <div className='mt-6'>
-                <Select.Root value={gameSelectedId} onValueChange={handleSelectGame}>
-                  <Select.Trigger disabled={gamesTwitch.length===0} className="px-3 py-2 rounded-lg bg-zinc-500 font-semibold hover:bg-zinc-600 disabled:bg-zinc-700">
-                    <Select.Value placeholder="Selecione um jogo da lista."/>
-                    <Select.Icon />
-                  </Select.Trigger>
+    <div className={props.className}>
+      <Dialog.Root open={isOpenModal} onOpenChange={handleOpenModal}> 
+        <Dialog.Trigger className='h-full'>
+          <GameBanner 
+            title={"Ache um jogo"}
+            cover={'https://cdn2.iconfinder.com/data/icons/social-aquicons/512/Twitch.png'}
+          />
+        </Dialog.Trigger>
+        <Dialog.Portal>
+              <Dialog.Overlay className='bg-black/60 inset-0 fixed'/>
+              <Dialog.Content className='fixed bg-[#2a2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[360px] shadow-lg shadow-black/25'>
+                <Dialog.Title className='text-3xl font-black'> Ache um jogo via Twitch.TV </Dialog.Title>
+                <div className='mt-6'>
+                  <Select.Root value={gameSelectedId} onValueChange={handleSelectGame}>
+                    <Select.Trigger disabled={gamesTwitch.length===0} className="px-3 py-2 rounded-lg bg-zinc-500 font-semibold hover:bg-zinc-600 disabled:bg-zinc-700">
+                      <Select.Value placeholder="Selecione um jogo da lista."/>
+                      <Select.Icon />
+                    </Select.Trigger>
 
-                  <Select.Portal>
-                    <Select.Content className='rounded-lg m-1 gap-2 flex flex-row'>
-                      <Select.ScrollUpButton />
-                      <Select.Viewport>
-                        <Select.Group>
-                          <Select.Label>Jogos via Twitch</Select.Label>
-                          {gamesTwitch && gamesTwitch.map(game => {
-                            return <Select.Item value={game.id} key={game.id} className='cursor-pointer text-white bg-zinc-900 hover:bg-zinc-700 py-3 px-4 text-sm font-semibold placeholder:text-zinc-500'>
-                              <Select.ItemText> {game.name} </Select.ItemText>
-                              <Select.ItemIndicator />
-                            </Select.Item>
-                          })}
-                          
-                        </Select.Group>
-                      </Select.Viewport>
-                      <Select.ScrollDownButton />
-                    </Select.Content>
-                  </Select.Portal>
-                </Select.Root>
-              </div>
-              <div className='pt-6 pb-6'>
-                {gameInfo && <GameBanner title={gameInfo.name} cover={gameInfo.box_art_url}/> }
-              </div>
-              <footer className='flex justify-end gap-4'>
-              <button 
-                className={`disabled:bg-zinc-700 bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3 `}
-                onClick={() => handleAddGame()}
-                disabled={isLoading}
-                >
-                <FloppyDisk  className='w-6 h-6'/>
-                Adicionar
-              </button>
-                <Dialog.Close 
-                  className='bg-zinc-500 px-5 h-12 rounded-md font-semibold hover:bg-zinc-600'>
-                    Cancelar
-                </Dialog.Close>
-              </footer>
-            </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-      
-    </>
+                    <Select.Portal>
+                      <Select.Content className='rounded-lg m-1 gap-2 flex flex-row'>
+                        <Select.ScrollUpButton />
+                        <Select.Viewport>
+                          <Select.Group>
+                            <Select.Label>Jogos via Twitch</Select.Label>
+                            {gamesTwitch && gamesTwitch.map(game => {
+                              return <Select.Item value={game.id} key={game.id} className='cursor-pointer text-white bg-zinc-900 hover:bg-zinc-700 py-3 px-4 text-sm font-semibold placeholder:text-zinc-500'>
+                                <Select.ItemText> {game.name} </Select.ItemText>
+                                <Select.ItemIndicator />
+                              </Select.Item>
+                            })}
+                            
+                          </Select.Group>
+                        </Select.Viewport>
+                        <Select.ScrollDownButton />
+                      </Select.Content>
+                    </Select.Portal>
+                  </Select.Root>
+                </div>
+                <div className='pt-6 pb-6'>
+                  {gameInfo && <GameBanner title={gameInfo.name} cover={gameInfo.box_art_url}/> }
+                </div>
+                <footer className='flex justify-end gap-4'>
+                <button 
+                  className={`disabled:bg-zinc-700 bg-violet-500 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3 `}
+                  onClick={() => handleAddGame()}
+                  disabled={isLoading}
+                  >
+                  <FloppyDisk  className='w-6 h-6'/>
+                  Adicionar
+                </button>
+                  <Dialog.Close 
+                    className='bg-zinc-500 px-5 h-12 rounded-md font-semibold hover:bg-zinc-600'>
+                      Cancelar
+                  </Dialog.Close>
+                </footer>
+              </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+        
+      </div>
   )
     
 }
