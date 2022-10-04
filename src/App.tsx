@@ -35,6 +35,12 @@ function App() {
         spacing: 8,
       },
       breakpoints: {
+        '(max-width: 1080px)': {
+          slides: {
+            perView: 4.5,
+            spacing: 2,
+          },
+        },
         '(max-width: 768px)': {
           slides: {
             perView: 2.5,
@@ -72,13 +78,13 @@ function App() {
 
   return (
     <div className='max-w-[1344px] mx-auto flex-col flex items-center my-20'>
-      <img src={logoImg} />
-      <h1 className='text-xl mt-5 md:text-6xl md:mt-20 text-white font-black '>
+      <img src={logoImg} className="md:scale-100 scale-75"/>
+      <h1 className='text-xl mt-5 sm:text-4xl md:text-6xl md:mt-20 text-white font-black '>
         Seu <span className='bg-nlw-gradient text-transparent bg-clip-text'>duo</span> está aqui.
       </h1>
-      <div className='w-full flex flex-row px-4'>
-        <button className='text-zinc-500 pr-2 text-5xl' onClick={goBack}> {'<'} </button>
-        <div className='md:mt-16 md:mb-20 mt-4 mb:5 flex-col flex w-9/12 grow'>
+      <div className='w-full flex flex-row md:px-4 px-1'>
+        <button onClick={goBack}> <CaretLeft size={48} className="text-zinc-500 font-bold"/> </button>
+        <div className='md:mt-16 md:mb-20 mt-4 mb-5 flex-col flex w-9/12 grow'>
             
             <div ref={sliderRef} className='keen-slider items-stretch'>
               {games.map((game, index) => {
@@ -93,7 +99,7 @@ function App() {
             <NewGame className='keen-slider__slide'/>
           </div>
         </div>
-        <button className='text-zinc-500 w-6 pl-2 text-5xl' onClick={goFoward}> {'>'} </button>
+        <button onClick={goFoward}> <CaretRight size={48} className="text-zinc-500"/> </button>
       </div>
       <Dialog.Root>
         <CreateAdBanner />

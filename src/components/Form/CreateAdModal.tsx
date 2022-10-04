@@ -101,7 +101,7 @@ export function CreateAdModal () {
           <div className='md:flex md:flex-col gap-1'>
             <label htmlFor='weekDays'>Quando costuma jogar?</label>
             <ToggleGroup.Root 
-              className='flex gap-1' 
+              className='flex gap-1 flex-wrap' 
               type="multiple"
               value={weekDays}
               onValueChange={value => setWeekDays(value)}>
@@ -185,7 +185,7 @@ export function CreateAdModal () {
           Costumo me conectar ao chat de voz.
         </label>
 
-        <footer className='mt-4 flex justify-end gap-4'>
+        <footer className='mt-4 flex flex-wrap justify-end gap-4'>
           <Dialog.Close 
             className='bg-zinc-500 px-5 h-12 rounded-md font-semibold hover:bg-zinc-600'>
               Cancelar
