@@ -6,7 +6,7 @@ import * as Select from '@radix-ui/react-select';
 import { getTwitchToken, TokenTwitchProps } from "../utils/getTwitchToken"
 import { GameBanner } from './GameBanner';
 import axios from 'axios';
-import { FloppyDisk  } from 'phosphor-react';
+import { ArrowDown, FloppyDisk  } from 'phosphor-react';
 
 interface GameTwitchProps{
   box_art_url: string,
@@ -118,7 +118,9 @@ export function NewGame (props: Props) {
                             
                           </Select.Group>
                         </Select.Viewport>
-                        <Select.ScrollDownButton />
+                        <Select.ScrollDownButton>
+                          <ArrowDown size={36}/>
+                        </Select.ScrollDownButton>
                       </Select.Content>
                     </Select.Portal>
                   </Select.Root>

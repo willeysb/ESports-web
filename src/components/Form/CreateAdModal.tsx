@@ -1,9 +1,12 @@
 import { FormEvent, useEffect, useState } from "react";
 
+
+import { Label } from '@radix-ui/react-label';
 import * as Dialog from "@radix-ui/react-dialog";
+import * as Select from '@radix-ui/react-select';
 import * as Checkbox from "@radix-ui/react-checkbox"
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { Check, GameController } from "phosphor-react";
+import { Check, GameController, ArrowDown } from "phosphor-react";
 
 import { Input } from "../Input";
 import axios from "axios";
@@ -23,6 +26,7 @@ export function CreateAdModal () {
 
   const [games, setGames] = useState<Game[]>([])
   const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
+  const [gameSelectedId, setGameSelectedId] = useState<string>()
   const [weekDays, setWeekDays] = useState<string[]>([])
 
   useEffect(() => {
@@ -35,27 +39,31 @@ export function CreateAdModal () {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
-    if (weekDays.length > 0) {
-      try {
-        await axios.post(`${baseUrl}/games/${data.game}/ads`, {
-          name: data.name,
-          yearsPlaying: Number(data.yearsPlaying),
-          discord: data.discord,
-          weekDays: weekDays.map(Number),
-          hourStart: data.hourStart,
-          hourEnd: data.hourEnd,
-          useVoiceChannel: useVoiceChannel
-        })
-        .catch(err => {
-          console.log(err)
-        })
-          alert('Anúncio criado com sucesso!')
-        } catch (error) {
-          console.log(error)
-          alert('Erro ao criar anúncio.')
-        }
+    if(gameSelectedId){
+      if (weekDays.length > 0 ) {
+        try {
+          await axios.post(`${baseUrl}/games/${gameSelectedId}/ads`, {
+            name: data.name,
+            yearsPlaying: Number(data.yearsPlaying),
+            discord: data.discord,
+            weekDays: weekDays.map(Number),
+            hourStart: data.hourStart,
+            hourEnd: data.hourEnd,
+            useVoiceChannel: useVoiceChannel
+          })
+          .catch(err => {
+            console.log(err)
+          })
+            alert('Anúncio criado com sucesso!')
+          } catch (error) {
+            console.log(error)
+            alert('Erro ao criar anúncio.')
+          }
+      } else {
+        alert('Pelo menos um dia na semana é necessário.')
+      }
     } else {
-      alert('Pelo menos um dia na semana é necessário.')
+      alert('É necessário selecionar um jogo.')
     }
     
 
@@ -65,25 +73,51 @@ export function CreateAdModal () {
   return (
     <Dialog.Portal>
     <Dialog.Overlay className='bg-black/60 inset-0 fixed'/>
-    <Dialog.Content className='fixed bg-[#2a2634] md:py-8 md:px-10 py-2 px-3 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg md:w-[640px] w-11/12 shadow-lg shadow-black/25'>
+    <Dialog.Content className='fixed bg-[#2a2634] md:py-8 md:px-10 py-4 px-6 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg md:w-[640px] w-11/12 shadow-lg shadow-black/25'>
       <Dialog.Title className='md:text-3xl text-xl font-black'> Publique um anúncio </Dialog.Title>
-      <form className='md:mt-8 mt-2' 
+      <form className='mt-4' 
             onSubmit={event => handleCreateAd(event)}
             >
-        <div className='flex flex-col md:gap-2 md:pt-4 pt-2'>
-          <label htmlFor='game' className='font-semibold'>Qual o game?</label>
-          <select 
-            required
-            id="game"
-            name="game" 
-            className='bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none'
-            defaultValue=""
-          >
-            <option disabled value=""> Selecione um game que deseja jogar </option>
-            {games.map(game => <option key={game.id} value={game.id}>{game.title}</option>)}
-          </select>
+        <div className='flex flex-col md:gap-2'>
+          <Label className="flex flex-col gap-2 md:pt-4">
+            <div>
+              Qual o game?
+            </div>
+            <Select.Root value={gameSelectedId} onValueChange={setGameSelectedId}>
+              <Select.Trigger disabled={games.length===0} className="text-left px-3 py-2 bg-zinc-900 hover:bg-zinc-600 disabled:bg-zinc-700">
+                <Select.Value placeholder="Selecione um game que deseja jogar"/>
+              </Select.Trigger>
+
+              <Select.Portal>
+                <Select.Content className='m-1 gap-2 flex flex-row'>
+                  <Select.ScrollUpButton />
+                  <Select.Viewport>
+                    <Select.Group>
+                      <Select.Item value={""} key={0} disabled className='cursor-not-allowed text-zinc-500 bg-zinc-900 hover:bg-zinc-700 py-3 px-4 text-sm placeholder:text-zinc-500'>
+                        <Select.ItemText> Selecione um game que deseja jogar </Select.ItemText>
+                        <Select.ItemIndicator />
+                      </Select.Item>
+                      {games && games.map(game => {
+                        return (
+                          <Select.Item value={game.id} key={game.id} className='cursor-pointer text-white bg-zinc-900 hover:bg-zinc-700 py-3 px-4 text-sm placeholder:text-zinc-500'>
+                            <Select.ItemText> {game.title} </Select.ItemText>
+                            <Select.ItemIndicator />
+                          </Select.Item>
+                        )
+                      })}
+                      
+                    </Select.Group>
+                  </Select.Viewport>
+                  <Select.ScrollDownButton>
+                    <ArrowDown />
+                  </Select.ScrollDownButton>
+                </Select.Content>
+              </Select.Portal>
+            </Select.Root>
+          </Label>
+          
         </div>
-        <div className='flex flex-col md:gap-2 pt-4'>
+        <div className='flex flex-col gap-2 pt-4'>
           <label htmlFor='name'>Seu nome (ou Nickname)</label>
           <Input required id="name" name="name" type='text' placeholder='Como te chamam dentro do game?'></Input>
         </div>
@@ -163,7 +197,7 @@ export function CreateAdModal () {
               </ToggleGroup.Item>
             </ToggleGroup.Root>
           </div>
-          <div className='md:flex md:flex-col md:gap-2 md:flex-1 pt-4'>
+          <div className='md:flex md:flex-col md:gap-2 md:flex-1 md:pt-0 pt-4'>
             <label htmlFor='hourStart'>Qual horário do dia?</label>
             <div className='grid grid-cols-2 gap-2'>
               <Input required id="hourStart" name="hourStart" type='time' placeholder='De'></Input>
