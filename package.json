@@ -14,9 +14,11 @@
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.0",
     "@radix-ui/react-dialog": "^1.0.0",
+    "@radix-ui/react-hover-card": "^1.0.0",
     "@radix-ui/react-select": "^1.0.0",
     "@radix-ui/react-toggle-group": "^1.0.0",
     "axios": "^0.27.2",
+    "firebase": "^9.10.0",
     "keen-slider": "^6.8.2",
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
