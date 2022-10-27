@@ -11,7 +11,7 @@ import { Check, GameController, ArrowDown } from "phosphor-react";
 import { Input } from "../Input";
 import axios from "axios";
 
-interface Game {
+export interface Game {
   id: string,
   title: string,
   bannerUrl: string,
@@ -20,7 +20,11 @@ interface Game {
   }
 }
 
-export function CreateAdModal () {
+interface Props {
+  setIsModalOpen: (newState : boolean) => void
+}
+
+export function CreateAdModal (props: Props) {
 
   const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
 
@@ -55,6 +59,7 @@ export function CreateAdModal () {
             console.log(err)
           })
             alert('Anúncio criado com sucesso!')
+            props.setIsModalOpen(false)
           } catch (error) {
             console.log(error)
             alert('Erro ao criar anúncio.')

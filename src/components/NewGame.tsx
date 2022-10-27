@@ -29,8 +29,8 @@ export function NewGame (props: Props) {
   const [ gameInfo, setGameInfo ] = useState<GameTwitchProps>()
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
 
-  function getTwitchAxiosConfig(): any {
-    return {headers: {
+  function getTwitchAxiosConfig() {
+    return { headers: {
       "Authorization": `Bearer ${tokenTwitch?.token}`,
       "Client-Id": `${tokenTwitch?.clientId}`
     }}
@@ -61,9 +61,13 @@ export function NewGame (props: Props) {
   }
 
   function handleAddGame():void {
+    setIsLoading(true)
     axios.post(`${baseUrl}/games`,{
       title: gameInfo?.name,
       bannerUrl: gameInfo?.box_art_url
+    }).then(() => {
+      alert("Jogo adicionado com sucesso.")
+      setIsLoading(false)
     })
   }
 
