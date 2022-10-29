@@ -1,4 +1,5 @@
-import { useEffect, useState, createContext, ReactNode } from 'react'
+import axios from 'axios'
+import { useEffect, useState, createContext, useContext } from 'react'
 import { Game } from '../components/Form/CreateAdModal'
 
 interface HomeInterface{
@@ -9,13 +10,20 @@ interface HomeInterface{
 
 const HomeContext = createContext({} as HomeInterface)
 
-const HomeProvider = (children: ReactNode) => {
+export const HomeProvider = ({children}) => {
+
+  const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
+
   const [loading, setLoading] = useState(true)
   const [games, setGames] = useState<Game[] | null>(null)
 
   useEffect(() => {
-    
+    axios.get(`${baseUrl}/games`).then((response) => {
+      setGames(response.data)
+      setLoading(false)
+    })
   }, [])
+
   return (
     <HomeContext.Provider value={{
         loading,
@@ -27,4 +35,9 @@ const HomeProvider = (children: ReactNode) => {
   )
 
 
+}
+
+export function useHome() {
+  const context = useContext(HomeContext);
+  return context;
 }

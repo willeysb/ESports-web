@@ -13,6 +13,7 @@ import { GameBanner } from '../components/GameBanner'
 import { NewGame } from '../components/NewGame';
 
 import logoImg from '../assets/logo_esports.svg'
+import { useHome } from '../contexts/HomeProvider';
 
 interface Game {
   id: string,
@@ -24,9 +25,10 @@ interface Game {
 }
 
 export function Home() {
-  const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
+  //const baseUrl = import.meta.env.VITE_BASE_SERVER_URL
 
-  const [games, setGames] = useState<Game[]>([])
+  // const [games, setGames] = useState<Game[]>([])
+  const { loading, games } = useHome();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const [sliderRef, instanceRef] = useKeenSlider(
@@ -68,9 +70,9 @@ export function Home() {
   }
 
   useEffect(() => {
-    axios.get(`${baseUrl}/games`).then((response) => {
-      setGames(response.data)
-    })
+    // axios.get(`${baseUrl}/games`).then((response) => {
+    //   setGames(response.data)
+    // })
   }, [])
 
   useEffect(() => {
